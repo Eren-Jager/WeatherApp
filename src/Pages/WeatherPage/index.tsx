@@ -3,36 +3,15 @@ import { WeatherCard } from "../../Components/WeatherCard";
 import Grid from "@mui/material/Grid";
 import "./Weatherpage.scss";
 
+const n = 10;
 export const WeatherPage = () => (
-  <>
-    <Grid className="Grid1" container spacing={3}>
-      <Grid item xs>
-        <WeatherCard />
-      </Grid>
-      <Grid item xs>
-        <WeatherCard />
-      </Grid>
-      <Grid item xs>
-        <WeatherCard />
-      </Grid>
-      <Grid item xs>
-        <WeatherCard />
-      </Grid>
-      <Grid item xs>
-        <WeatherCard />
-      </Grid>
-      <Grid item xs>
-        <WeatherCard />
-      </Grid>
-      <Grid item xs>
-        <WeatherCard />
-      </Grid>
-      <Grid item xs>
-        <WeatherCard />
-      </Grid>
-      <Grid item xs>
-        <WeatherCard />
-      </Grid>
-    </Grid>
-  </>
+  <Grid className="Grid1" container spacing={3}>
+    {React.Children.toArray(
+      [...Array(n)].map((index) => (
+        <Grid key={index} item xs>
+          <WeatherCard />
+        </Grid>
+      ))
+    )}
+  </Grid>
 );

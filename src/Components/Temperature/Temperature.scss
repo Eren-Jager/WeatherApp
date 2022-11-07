@@ -1,16 +1,18 @@
-.currenttemperature{
-    font-size: 3.6rem;
+.currenttemperature {
+  font-size: 3.6rem;
 }
-.currenttempUnits{
-    font-size: 20px;
-    padding-top: 15px;
-    padding-left: 10px;
-    padding-right: 10px;
+.currenttempUnits {
+  font-size: 20px;
+  padding-top: 15px;
+  padding-left: 10px;
+  padding-right: 10px;
+  color: #b5a7a7;
+  font-weight: 600;
 }
-.currenttemperatureConatiner{
-    display: flex;
-    justify-content: flex-end;
+.currenttemperatureConatiner {
+  display: flex;
+  justify-content: flex-end;
 }
-.highlight{
-    color: azure;
+.highlight {
+  color: rgb(0, 0, 0);
 }

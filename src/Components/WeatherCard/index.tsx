@@ -8,9 +8,8 @@ import {
   IconButton,
   Menu,
   MenuItem,
+  TextField,
 } from "@mui/material";
-import Paper from "@mui/material/Paper";
-import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
@@ -31,6 +30,7 @@ export const WeatherCard = () => {
   const [isLoading, updateLoading] = useState(false);
   const [location, updateLocation] = useState("");
   const [isSearch, updateSearch] = useState(false);
+  const [isError, updateError] = useState(false);
   const handleStationChange = (e: {
     target: { value: SetStateAction<string> };
   }) => {
@@ -44,11 +44,30 @@ export const WeatherCard = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  if (currentWeatherData) {
+    setTimeout(async () => {
+      const response = await getCurrentWeatherData(location);
+      if (!response.hasError) {
+        updateWeatherData(response.data);
+      }
+    }, 30000);
+  }
+
   async function fetchData() {
     updateLoading(true);
-    updateWeatherData(await getCurrentWeatherData(location));
+    const response = await getCurrentWeatherData(location);
+    updateError(response.hasError);
+    if (!response.hasError) {
+      updateWeatherData(response.data);
+      updateSearch(false);
+    }
     updateLoading(false);
   }
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    fetchData();
+  };
   return (
     <>
       <Card
@@ -56,41 +75,39 @@ export const WeatherCard = () => {
         sx={{ maxWidth: 360 }}
         onClick={() => updateSearch(false)}
       >
-        {!currentWeatherData ? (
-          !isSearch ? (
-            <IconButton
+        {!currentWeatherData || isSearch ? (
+          !isSearch || (currentWeatherData && !isSearch) ? (
+            <CardContent
+              style={{ height: "100%" }}
               onClick={(e) => {
                 updateSearch(true);
                 e.stopPropagation();
               }}
-              style={{ top: "15px" }}
-              aria-label="delete"
             >
-              <ControlPointIcon className="Icon" />
-            </IconButton>
+              <IconButton style={{ top: "15px" }} aria-label="delete">
+                <ControlPointIcon className="Icon fadeIn" />
+              </IconButton>
+            </CardContent>
           ) : (
             <CardContent>
               {isLoading ? (
                 <CircularProgress />
               ) : (
-                <Paper
+                <div
+                  className="ForstedGlass fadeIn SearchCard"
                   onClick={(e) => e.stopPropagation()}
-                  className="ForstedGlass fadeIn"
-                  component="form"
-                  sx={{
-                    p: "2px 4px",
-                    display: "flex",
-                    alignItems: "center",
-                    width: "auto",
-                  }}
-                  style={{ borderRadius: "22px" }}
                 >
-                  <InputBase
-                    sx={{ ml: 1, flex: 1 }}
+                  <TextField
+                    error
+                    helperText={isError ? "Incorrect City" : ""}
                     placeholder="Search Cities"
-                    inputProps={{ "aria-label": "Search Cities" }}
                     value={location}
                     onChange={handleStationChange}
+                    id="filled-hidden-label-small"
+                    onKeyPress={(event) => {
+                      if (event.key === "Enter") handleSubmit(event);
+                    }}
+                    size="small"
                   />
                   <IconButton
                     type="button"
@@ -100,7 +117,7 @@ export const WeatherCard = () => {
                   >
                     <SearchIcon />
                   </IconButton>
-                </Paper>
+                </div>
               )}
             </CardContent>
           )
@@ -139,12 +156,33 @@ export const WeatherCard = () => {
                     TransitionComponent={Fade}
                   >
                     <MenuItem
-                      style={{ borderBottom: "1px solid #b3b3b354" }}
-                      onClick={handleClose}
+                      style={{
+                        borderBottom: "1px solid #b3b3b354",
+                        paddingTop: "1px",
+                        paddingBottom: "1px",
+                      }}
+                      onClick={(e) => {
+                        updateSearch(true);
+                        updateLocation("");
+                        e.stopPropagation();
+                        handleClose();
+                      }}
                     >
                       Edit
                     </MenuItem>
-                    <MenuItem onClick={() => {updateWeatherData(""); handleClose()}}>Reset Card</MenuItem>
+                    <MenuItem
+                      style={{
+                        paddingTop: "1px",
+                        paddingBottom: "1px",
+                      }}
+                      onClick={() => {
+                        updateWeatherData("");
+                        updateLocation("");
+                        handleClose();
+                      }}
+                    >
+                      Reset Card
+                    </MenuItem>
                   </Menu>
                 </>
               }

@@ -1,17 +1,19 @@
 .App {
   text-align: center;
-  font-family: 'IBM Plex Sans', sans-serif;
+  font-family: "IBM Plex Sans", sans-serif;
 }
 
-  body{
-    background: linear-gradient(to top, #a8edea 0%, #fed6e3 100%);
+body {
+  background: linear-gradient(to top, #a8edea 0%, #fed6e3 100%);
 
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-
-  }
-  html, body {height: 100%}
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+html,
+body {
+  height: 100%;
+}
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -24,8 +26,6 @@
 }
 
 .App-header {
-
-
   min-height: 100vh;
   display: flex;
   flex-direction: column;

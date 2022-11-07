@@ -1,87 +1,104 @@
-.weatherimg{
-   width: auto;
-   height: 90px;
+.weatherimg {
+  width: auto;
+  height: 90px;
 }
-.MuiCard-root{
-background-color: aqua;
+.MuiCard-root {
+  background-color: aqua;
 }
-.weatherdesc{
-   font-size: 1.9rem;
-   text-transform: capitalize;
+.weatherdesc {
+  font-size: 1.9rem;
+  text-transform: capitalize;
 }
-.CurrentWeatherConatiner{
-display: flex;
-align-items: center;
-justify-content: space-between;
-padding-top: 10px;
-padding-bottom: 10px;
+.CurrentWeatherConatiner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
-.subhead{
-   font-size:10px;
-   color: gray;
+.subhead {
+  font-size: 10px;
+  color: gray;
 }
-.infos{
-   display: flex;
-   justify-content: space-around;
-   padding-top: 10px;
+.infos {
+  display: flex;
+  justify-content: space-around;
+  padding-top: 10px;
 }
-.subtext{
-   font-size: 1.1rem;
+.subtext {
+  font-size: 1.1rem;
 }
-.feels{
-   font-size: 1.2rem;
+.feels {
+  font-size: 1.2rem;
 }
-.currentweatherTemps{
-   text-align: right;
-   width: 220px;
+.currentweatherTemps {
+  text-align: right;
+  width: 220px;
 }
-.MuiCardHeader-title{
-   font-size: 22px!important;
-   font-weight: 500!important;
+.MuiCardHeader-title {
+  font-size: 22px !important;
+  font-weight: 500 !important;
 }
-.SunTimes{
-   text-align: right;
+.SunTimes {
+  text-align: right;
 }
-.localTimes{
-   font-size: 18px;
-   text-align: left;
-   display: flex;
-   justify-content: space-between;
-   align-items: center;
-   padding-top: 20px;
-   padding-bottom: 10px;
+.localTimes {
+  font-size: 18px;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 20px;
+  padding-bottom: 10px;
 }
-.Weathercard{
-   width: 360px;
-   height: 450px;
+.Weathercard {
+  width: 360px;
+  height: 450px;
 }
-.ForstedGlass{
-   background: rgba(255, 255, 255, 0.11)!important;
-border-radius: 16px!important;
-box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1)!important;
-backdrop-filter: blur(2.6px)!important;
--webkit-backdrop-filter: blur(2.6px)!important;
-border: 1px solid rgba(255, 255, 255, 0.34)!important;
+.ForstedGlass {
+  background: rgba(255, 255, 255, 0.11) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1) !important;
+  backdrop-filter: blur(2.6px) !important;
+  -webkit-backdrop-filter: blur(2.6px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.34) !important;
 }
-.Icon{
-   width: 80px!important;
-   height: 80px!important;
-   color: rgb(183 195 205 / 21%);
+.Icon {
+  width: 80px !important;
+  height: 80px !important;
+  color: rgb(183 195 205 / 21%);
 }
 .fadeIn {
-   animation: fadeInAnimation 0.5s;
- }
- 
- @keyframes fadeInAnimation {
-     from { opacity: 0; transform: scale(0);}
-     to   { opacity: 1; transform: scale(1); }
- }
+  animation: fadeInAnimation 0.3s;
+}
 
- .MuiMenu-paper{
-   background: rgba(255, 255, 255, 0.11)!important;
-   border-radius: 16px!important;
-   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1)!important;
-   backdrop-filter: blur(2.6px)!important;
-   -webkit-backdrop-filter: blur(2.6px)!important;
-   border: 1px solid rgba(255, 255, 255, 0.34)!important;
- }
+@keyframes fadeInAnimation {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.MuiMenu-paper {
+  background: rgba(255, 255, 255, 0.11) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1) !important;
+  backdrop-filter: blur(2.6px) !important;
+  -webkit-backdrop-filter: blur(2.6px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.34) !important;
+}
+.MuiOutlinedInput-notchedOutline {
+  border: none !important;
+}
+.SearchCard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.MuiMenu-list {
+  padding: 0 !important;
+}
