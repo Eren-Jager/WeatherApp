@@ -1,3 +1,4 @@
+import { SetStateAction, useState } from "react";
 import {
   Card,
   CardContent,
@@ -5,22 +6,20 @@ import {
   CircularProgress,
   IconButton,
 } from "@mui/material";
-import { SetStateAction, useEffect, useState } from "react";
-import "./WeatherCard.scss";
+import Paper from "@mui/material/Paper";
+import InputBase from "@mui/material/InputBase";
+import SearchIcon from "@mui/icons-material/Search";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
+import ControlPointIcon from "@mui/icons-material/ControlPoint";
 import { CurrentTemperature, Temperature } from "../Temperature";
 import humidity from "../../assets/humidity.svg";
 import wind from "../../assets/wind.svg";
 import visibility from "../../assets/visibility.svg";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import SearchIcon from "@mui/icons-material/Search";
-import Paper from "@mui/material/Paper";
-import InputBase from "@mui/material/InputBase";
 import { getCurrentWeatherData } from "../../Utils";
-import ControlPointIcon from "@mui/icons-material/ControlPoint";
-import { currentWeatherData1 } from "../../mock";
+import "./WeatherCard.scss";
 dayjs.extend(utc);
 
 interface Props {
@@ -39,9 +38,9 @@ export const WeatherCard = ({ isMetricUnit, isAnimated }: Props) => {
   }) => {
     updateLocation(e.target.value);
   };
-  function fetchData() {
+  async function fetchData() {
     updateLoading(true);
-    updateWeatherData(currentWeatherData1);
+    updateWeatherData(await getCurrentWeatherData(location));
     updateLoading(false);
   }
   return (
@@ -109,6 +108,7 @@ export const WeatherCard = ({ isMetricUnit, isAnimated }: Props) => {
             <CardContent style={{ paddingTop: 0 }}>
               <div className="CurrentWeatherConatiner fadeIn">
                 <img
+                style={{transform: "scale(2.5)"}}
                   className="weatherimg"
                   alt="image1"
                   src={require(`../../assets/${currentWeatherData.weather[0].icon}.svg`)}
