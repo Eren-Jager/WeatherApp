@@ -45,11 +45,18 @@ export const WeatherCard = ({ isMetricUnit, isAnimated }: Props) => {
   }
   return (
     <>
-      <Card className="Weathercard ForstedGlass" sx={{ maxWidth: 360 }}>
+      <Card
+        className="Weathercard ForstedGlass"
+        sx={{ maxWidth: 360 }}
+        onClick={() => updateSearch(false)}
+      >
         {!currentWeatherData ? (
           !isSearch ? (
             <IconButton
-              onClick={() => updateSearch(true)}
+              onClick={(e) => {
+                updateSearch(true);
+                e.stopPropagation();
+              }}
               style={{ top: "15px" }}
               aria-label="delete"
             >
@@ -61,6 +68,7 @@ export const WeatherCard = ({ isMetricUnit, isAnimated }: Props) => {
                 <CircularProgress />
               ) : (
                 <Paper
+                  onClick={(e) => e.stopPropagation()}
                   className="ForstedGlass fadeIn"
                   component="form"
                   sx={{
@@ -108,7 +116,7 @@ export const WeatherCard = ({ isMetricUnit, isAnimated }: Props) => {
             <CardContent style={{ paddingTop: 0 }}>
               <div className="CurrentWeatherConatiner fadeIn">
                 <img
-                style={{transform: "scale(2.5)"}}
+                  style={{ transform: "scale(2.5)" }}
                   className="weatherimg"
                   alt="image1"
                   src={require(`../../assets/${currentWeatherData.weather[0].icon}.svg`)}
