@@ -4,7 +4,10 @@ import {
   CardContent,
   CardHeader,
   CircularProgress,
+  Fade,
   IconButton,
+  Menu,
+  MenuItem,
 } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
@@ -22,12 +25,7 @@ import { getCurrentWeatherData } from "../../Utils";
 import "./WeatherCard.scss";
 dayjs.extend(utc);
 
-interface Props {
-  isMetricUnit: boolean;
-  isAnimated: boolean;
-}
-
-export const WeatherCard = ({ isMetricUnit, isAnimated }: Props) => {
+export const WeatherCard = () => {
   const [currentWeatherData, updateWeatherData] = useState<any>();
   const [isCelcius, setUnits] = useState(true);
   const [isLoading, updateLoading] = useState(false);
@@ -37,6 +35,14 @@ export const WeatherCard = ({ isMetricUnit, isAnimated }: Props) => {
     target: { value: SetStateAction<string> };
   }) => {
     updateLocation(e.target.value);
+  };
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
   };
   async function fetchData() {
     updateLoading(true);
@@ -108,9 +114,39 @@ export const WeatherCard = ({ isMetricUnit, isAnimated }: Props) => {
               }
               style={{ textAlign: "left", fontWeight: "1000", color: "grey" }}
               action={
-                <IconButton aria-label="settings">
-                  <MoreVertIcon />
-                </IconButton>
+                <>
+                  <IconButton aria-label="settings" onClick={handleClick}>
+                    <MoreVertIcon />
+                  </IconButton>
+                  <Menu
+                    elevation={0}
+                    anchorOrigin={{
+                      vertical: "center",
+                      horizontal: "left",
+                    }}
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "right",
+                    }}
+                    id="fade-menu"
+                    MenuListProps={{
+                      "aria-labelledby": "fade-button",
+                    }}
+                    style={{ padding: "0" }}
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                    TransitionComponent={Fade}
+                  >
+                    <MenuItem
+                      style={{ borderBottom: "1px solid #b3b3b354" }}
+                      onClick={handleClose}
+                    >
+                      Edit
+                    </MenuItem>
+                    <MenuItem onClick={() => {updateWeatherData(""); handleClose()}}>Reset Card</MenuItem>
+                  </Menu>
+                </>
               }
             />
             <CardContent style={{ paddingTop: 0 }}>
