@@ -201,6 +201,7 @@ export const WeatherCard = ({ cardId }: Props) => {
                       onClick={() => {
                         updateWeatherData("");
                         updateLocation("");
+                        localStorage.removeItem(cardId);
                         handleClose();
                       }}
                     >
@@ -239,7 +240,7 @@ export const WeatherCard = ({ cardId }: Props) => {
               </div>
               <div className="localTimes">
                 <div>
-                  <div className="subhead">Local Time</div>
+                  <div className="subhead">Last Refreshed (Local Time)</div>
                   <div>
                     {dayjs
                       .utc()
