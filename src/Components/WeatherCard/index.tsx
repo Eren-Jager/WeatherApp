@@ -36,11 +36,9 @@ export const WeatherCard = ({ cardId }: Props) => {
   const [isSearch, updateSearch] = useState(false);
   const [isInvalidCity, updateIncorrectCity] = useState(false);
   const [noInternet, updateConnection] = useState(false);
-  const handleStationChange = (e: {
-    target: { value: SetStateAction<string> };
-  }) => {
-    updateLocation(e.target.value);
-  };
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+
   useEffect(() => {
     const cardCache = localStorage.getItem(cardId);
     if (cardCache) {
@@ -49,15 +47,21 @@ export const WeatherCard = ({ cardId }: Props) => {
     }
   }, []);
 
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
+  const handleStationChange = (e: {
+    target: { value: SetStateAction<string> };
+  }) => {
+    updateLocation(e.target.value);
+  };
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
-
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    fetchData();
+  };
   if (currentWeatherData) {
     setTimeout(async () => {
       const response = await getCurrentWeatherData(currentWeatherData.name);
@@ -67,10 +71,9 @@ export const WeatherCard = ({ cardId }: Props) => {
       }
     }, 30000);
   }
-
   async function fetchData() {
     updateLoading(true);
-    updateConnection(false)
+    updateConnection(false);
     const response = await getCurrentWeatherData(location);
     if (!response.invalidCity && !response.isOffline) {
       updateWeatherData(response.data);
@@ -81,10 +84,7 @@ export const WeatherCard = ({ cardId }: Props) => {
     } else updateIncorrectCity(response.invalidCity);
     updateLoading(false);
   }
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    fetchData();
-  };
+
   return (
     <>
       <Card
