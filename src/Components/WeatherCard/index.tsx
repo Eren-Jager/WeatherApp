@@ -1,4 +1,4 @@
-import { SetStateAction, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -24,50 +24,67 @@ import { getCurrentWeatherData } from "../../Utils";
 import "./WeatherCard.scss";
 dayjs.extend(utc);
 
-export const WeatherCard = () => {
+interface Props {
+  cardId: string;
+}
+
+export const WeatherCard = ({ cardId }: Props) => {
   const [currentWeatherData, updateWeatherData] = useState<any>();
   const [isCelcius, setUnits] = useState(true);
   const [isLoading, updateLoading] = useState(false);
   const [location, updateLocation] = useState("");
   const [isSearch, updateSearch] = useState(false);
-  const [isError, updateError] = useState(false);
+  const [isInvalidCity, updateIncorrectCity] = useState(false);
+  const [noInternet, updateConnection] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+
+  useEffect(() => {
+    const cardCache = localStorage.getItem(cardId);
+    if (cardCache) {
+      updateWeatherData(JSON.parse(cardCache));
+      updateSearch(false);
+    }
+  }, []);
+
   const handleStationChange = (e: {
     target: { value: SetStateAction<string> };
   }) => {
     updateLocation(e.target.value);
   };
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
-
-  if (currentWeatherData) {
-    setTimeout(async () => {
-      const response = await getCurrentWeatherData(location);
-      if (!response.hasError) {
-        updateWeatherData(response.data);
-      }
-    }, 30000);
-  }
-
-  async function fetchData() {
-    updateLoading(true);
-    const response = await getCurrentWeatherData(location);
-    updateError(response.hasError);
-    if (!response.hasError) {
-      updateWeatherData(response.data);
-      updateSearch(false);
-    }
-    updateLoading(false);
-  }
   const handleSubmit = (e: any) => {
     e.preventDefault();
     fetchData();
   };
+  if (currentWeatherData) {
+    setTimeout(async () => {
+      const response = await getCurrentWeatherData(currentWeatherData.name);
+      if (!response.invalidCity) {
+        updateWeatherData(response.data);
+        localStorage.setItem(cardId, JSON.stringify(response.data));
+      }
+    }, 30000);
+  }
+  async function fetchData() {
+    updateLoading(true);
+    updateConnection(false);
+    const response = await getCurrentWeatherData(location);
+    if (!response.invalidCity && !response.isOffline) {
+      updateWeatherData(response.data);
+      updateSearch(false);
+      localStorage.setItem(cardId, JSON.stringify(response.data));
+    } else if (response.isOffline) {
+      updateConnection(response.isOffline);
+    } else updateIncorrectCity(response.invalidCity);
+    updateLoading(false);
+  }
+
   return (
     <>
       <Card
@@ -99,7 +116,13 @@ export const WeatherCard = () => {
                 >
                   <TextField
                     error
-                    helperText={isError ? "Incorrect City" : ""}
+                    helperText={
+                      noInternet
+                        ? "Unable to Connect to Internet"
+                        : isInvalidCity
+                        ? "Incorrect City"
+                        : ""
+                    }
                     placeholder="Search Cities"
                     value={location}
                     onChange={handleStationChange}
@@ -178,6 +201,7 @@ export const WeatherCard = () => {
                       onClick={() => {
                         updateWeatherData("");
                         updateLocation("");
+                        localStorage.removeItem(cardId);
                         handleClose();
                       }}
                     >
@@ -216,7 +240,7 @@ export const WeatherCard = () => {
               </div>
               <div className="localTimes">
                 <div>
-                  <div className="subhead">Local Time</div>
+                  <div className="subhead">Last Refreshed (Local Time)</div>
                   <div>
                     {dayjs
                       .utc()
