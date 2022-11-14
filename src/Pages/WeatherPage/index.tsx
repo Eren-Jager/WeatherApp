@@ -7,9 +7,9 @@ const n = 10;
 export const WeatherPage = () => (
   <Grid className="Grid1" container spacing={3}>
     {React.Children.toArray(
-      [...Array(n)].map((index) => (
+      [...Array(n)].map((item, index) => (
         <Grid key={index} item xs>
-          <WeatherCard />
+          <WeatherCard cardId={index.toString()} />
         </Grid>
       ))
     )}
